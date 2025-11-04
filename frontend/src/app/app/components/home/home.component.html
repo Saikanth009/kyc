@@ -24,6 +24,40 @@
     </div>
   </div>
 
+  <div *ngIf="me" class="recent">
+    <h3>Your Uploaded Documents</h3>
+    <div class="grid-2">
+      <div>
+        <div class="muted">Aadhaar</div>
+        <ng-container *ngIf="me.documents?.aadhaar; else noA">
+          <a [href]="baseUrl + '/uploads/' + me.documents.aadhaar" target="_blank">{{ me.documents.aadhaar }}</a>
+        </ng-container>
+        <ng-template #noA>No file</ng-template>
+      </div>
+      <div>
+        <div class="muted">PAN</div>
+        <ng-container *ngIf="me.documents?.pan; else noP">
+          <a [href]="baseUrl + '/uploads/' + me.documents.pan" target="_blank">{{ me.documents.pan }}</a>
+        </ng-container>
+        <ng-template #noP>No file</ng-template>
+      </div>
+      <div>
+        <div class="muted">Photo</div>
+        <ng-container *ngIf="me.documents?.photo; else noPh">
+          <img [src]="baseUrl + '/uploads/' + me.documents.photo" style="max-height:100px;border-radius:8px" />
+        </ng-container>
+        <ng-template #noPh>No file</ng-template>
+      </div>
+      <div>
+        <div class="muted">Address Proof</div>
+        <ng-container *ngIf="me.documents?.addressProof; else noAd">
+          <a [href]="baseUrl + '/uploads/' + me.documents.addressProof" target="_blank">{{ me.documents.addressProof }}</a>
+        </ng-container>
+        <ng-template #noAd>No file</ng-template>
+      </div>
+    </div>
+  </div>
+
   <div class="how">
     <h3>How It Works</h3>
     <div class="step">

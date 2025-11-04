@@ -13,7 +13,7 @@
           <input name="password" [(ngModel)]="model.password" placeholder="Enter your password" type="password" required />
         </div>
         <div class="actions">
-          <button class="btn" type="submit" [disabled]="loading || !f.form.valid">Login</button>
+          <button class="btn" type="submit">Login</button>
         </div>
         <div *ngIf="error" class="muted">{{ error }}</div>
         <div class="muted">Don't have an account? <a routerLink="/register">Register here</a></div>

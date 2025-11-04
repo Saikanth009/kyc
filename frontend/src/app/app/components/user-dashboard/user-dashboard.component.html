@@ -1,98 +1,194 @@
 <div class="wrap" *ngIf="me; else loading">
-  <div class="top">
-    <h2>Welcome, {{ me.name }}!</h2>
-    <button class="logout" (click)="logout()">Logout</button>
-  </div>
-  <p class="muted">Manage your KYC verification status and details</p>
-
-  <div class="section">
-    <div class="head">
-      <span>KYC Verification Status</span>
-      <span class="badge">{{ me.status || 'Pending' }}</span>
-    </div>
-    <div class="body">
-      <div class="field muted">Your KYC application is under review. We will notify you once it is processed.</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="head">Personal Information</div>
-    <div class="body grid-2">
-      <div class="field">
-        <div class="muted">Full Name</div>
-        <div>{{ me.name }}</div>
-      </div>
-      <div class="field">
-        <div class="muted">Email Address</div>
-        <div>{{ me.email }}</div>
-      </div>
-      <div class="field">
-        <div class="muted">Phone Number</div>
-        <div>{{ me.phone }}</div>
-      </div>
-      <div class="field">
-        <div class="muted">Address</div>
-        <div>{{ me.address }}</div>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">
+        <span class="shield-icon">🛡️</span>
+        <span class="logo-text">KYC Portal</span>
       </div>
     </div>
+    <button class="logout-btn" (click)="logout()">
+      <span class="logout-icon">→</span>
+      Logout
+    </button>
   </div>
 
-  <div class="section">
-    <div class="head">KYC Documents</div>
-    <div class="body grid-2">
-      <div>
-        <div class="muted">Aadhaar Document</div>
-        <div class="doc">
-          <ng-container *ngIf="me.documents?.aadhaar; else doc1">
-            <a [href]="'http://localhost:4000/uploads/' + me.documents.aadhaar" target="_blank">{{ me.documents.aadhaar }}</a>
-          </ng-container>
-          <ng-template #doc1>No file</ng-template>
-        </div>
+  <!-- Welcome Section -->
+  <div class="welcome-section">
+    <h1 class="welcome-title">Welcome, {{ me.name }}!</h1>
+    <p class="welcome-subtitle">Manage your KYC verification status and details</p>
+  </div>
+
+  <!-- KYC Verification Status Card -->
+  <div class="card">
+    <div class="card-header status-header">
+      <span class="header-title">KYC Verification Status</span>
+      <span class="status-badge" [class]="getStatusClass(me.status || 'Pending')">
+        <span class="clock-icon">🕐</span>
+        {{ me.status || 'Pending' }}
+      </span>
+    </div>
+    <div class="card-body">
+      <div class="status-message" *ngIf="me.status === 'Pending'">
+        Your KYC application is under review. We will notify you once it is processed.
       </div>
-      <div>
-        <div class="muted">PAN Document</div>
-        <div class="doc">
-          <ng-container *ngIf="me.documents?.pan; else doc2">
-            <a [href]="'http://localhost:4000/uploads/' + me.documents.pan" target="_blank">{{ me.documents.pan }}</a>
-          </ng-container>
-          <ng-template #doc2>No file</ng-template>
-        </div>
+      <div class="status-message approved" *ngIf="me.status === 'Approved'">
+        Your KYC has been approved. You now have full access.
       </div>
-      <div>
-        <div class="muted">Photograph</div>
-        <div class="doc">
-          <ng-container *ngIf="me.documents?.photo; else doc3">
-            <img [src]="'http://localhost:4000/uploads/' + me.documents.photo" style="max-height:120px" />
-          </ng-container>
-          <ng-template #doc3>No file</ng-template>
-        </div>
-      </div>
-      <div>
-        <div class="muted">Address Proof</div>
-        <div class="doc">
-          <ng-container *ngIf="me.documents?.addressProof; else doc4">
-            <a [href]="'http://localhost:4000/uploads/' + me.documents.addressProof" target="_blank">{{ me.documents.addressProof }}</a>
-          </ng-container>
-          <ng-template #doc4>No file</ng-template>
-        </div>
+      <div class="status-message rejected" *ngIf="me.status === 'Rejected'">
+        Your KYC has been rejected. Please re-upload correct documents.
       </div>
     </div>
   </div>
 
-  <div class="section">
-    <div class="head">Upload / Update Documents</div>
-    <div class="body">
-      <form (submit)="upload($event)" class="grid-2">
-        <label>Aadhaar<input type="file" name="aadhaar" /></label>
-        <label>PAN<input type="file" name="pan" /></label>
-        <label>Photo<input type="file" name="photo" /></label>
-        <label>Address Proof<input type="file" name="addressProof" /></label>
-        <div style="grid-column:1/-1">
-          <button class="logout" style="background:#0b7285;color:#fff;border-color:#0b7285">Upload</button>
-          <span *ngIf="uploadError" class="muted">{{ uploadError }}</span>
-        </div>
-      </form>
+  <!-- Personal Information Card -->
+  <div class="card">
+    <div class="card-header">
+      <span class="header-title">Personal Information</span>
     </div>
+    <div class="card-body">
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-icon">👤</div>
+          <div class="info-content">
+            <div class="info-label">Full Name</div>
+            <div class="info-value">{{ me.name }}</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">📞</div>
+          <div class="info-content">
+            <div class="info-label">Phone Number</div>
+            <div class="info-value">{{ me.phone }}</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">✉️</div>
+          <div class="info-content">
+            <div class="info-label">Email Address</div>
+            <div class="info-value">{{ me.email }}</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">📍</div>
+          <div class="info-content">
+            <div class="info-label">Address</div>
+            <div class="info-value">{{ me.address }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KYC Documents Card -->
+  <div class="card">
+    <div class="card-header">
+      <span class="header-title">KYC Documents</span>
+    </div>
+    <div class="card-body">
+      <!-- Document Numbers Row -->
+      <div class="doc-numbers-row">
+        <div class="doc-number-item">
+          <div class="doc-icon">📄</div>
+          <div class="doc-content">
+            <div class="doc-label">Aadhaar Number</div>
+            <div class="doc-value">{{ me.aadhaar || 'Not provided' }}</div>
+          </div>
+        </div>
+        <div class="doc-number-item">
+          <div class="doc-icon">📄</div>
+          <div class="doc-content">
+            <div class="doc-label">PAN Number</div>
+            <div class="doc-value">{{ me.pan || 'Not provided' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Uploaded Images Row -->
+      <div class="doc-images-row">
+        <!-- Aadhaar Document -->
+        <div class="doc-image-item">
+          <div class="doc-image-title">Aadhaar Document</div>
+          <div class="doc-image-container">
+            <ng-container *ngIf="me.documents?.aadhaar; else noAadhaar">
+              <img [src]="baseUrl + '/uploads/' + me.documents.aadhaar + '?t=' + cacheBust" 
+                   class="doc-image" 
+                   (click)="openFile(baseUrl + '/uploads/' + me.documents.aadhaar + '?t=' + cacheBust)" />
+            </ng-container>
+            <ng-template #noAadhaar>
+              <div class="no-image">No image uploaded</div>
+            </ng-template>
+          </div>
+          <div class="doc-actions">
+            <button class="action-btn delete-btn" (click)="deleteDocument('aadhaar')" title="Delete">
+              🗑️ Delete
+            </button>
+            <button class="action-btn upload-btn" (click)="triggerFileUpload('aadhaar')" title="Upload">
+              📤 Upload
+            </button>
+          </div>
+        </div>
+
+        <!-- PAN Document -->
+        <div class="doc-image-item">
+          <div class="doc-image-title">PAN Document</div>
+          <div class="doc-image-container">
+            <ng-container *ngIf="me.documents?.pan; else noPan">
+              <img [src]="baseUrl + '/uploads/' + me.documents.pan + '?t=' + cacheBust" 
+                   class="doc-image" 
+                   (click)="openFile(baseUrl + '/uploads/' + me.documents.pan + '?t=' + cacheBust)" />
+            </ng-container>
+            <ng-template #noPan>
+              <div class="no-image">No image uploaded</div>
+            </ng-template>
+          </div>
+          <div class="doc-actions">
+            <button class="action-btn delete-btn" (click)="deleteDocument('pan')" title="Delete">
+              🗑️ Delete
+            </button>
+            <button class="action-btn upload-btn" (click)="triggerFileUpload('pan')" title="Upload">
+              📤 Upload
+            </button>
+          </div>
+        </div>
+
+        <!-- Photograph -->
+        <div class="doc-image-item">
+          <div class="doc-image-title">Photograph</div>
+          <div class="doc-image-container">
+            <ng-container *ngIf="me.documents?.photo; else noPhoto">
+              <img [src]="baseUrl + '/uploads/' + me.documents.photo + '?t=' + cacheBust" 
+                   class="doc-image" 
+                   (click)="openFile(baseUrl + '/uploads/' + me.documents.photo + '?t=' + cacheBust)" />
+            </ng-container>
+            <ng-template #noPhoto>
+              <div class="no-image">No image uploaded</div>
+            </ng-template>
+          </div>
+          <div class="doc-actions">
+            <button class="action-btn delete-btn" (click)="deleteDocument('photo')" title="Delete">
+              🗑️ Delete
+            </button>
+            <button class="action-btn upload-btn" (click)="triggerFileUpload('photo')" title="Upload">
+              📤 Upload
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden file inputs for individual uploads -->
+  <input #aadhaarInput type="file" accept="image/*" (change)="uploadSingleDocument('aadhaar', $event)" style="display: none;" />
+  <input #panInput type="file" accept="image/*" (change)="uploadSingleDocument('pan', $event)" style="display: none;" />
+  <input #photoInput type="file" accept="image/*" (change)="uploadSingleDocument('photo', $event)" style="display: none;" />
+  
+  <!-- Success/Error Messages -->
+  <div *ngIf="successMessage" class="success-message">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="uploadError" class="error-message">
+    {{ uploadError }}
   </div>
 </div>
 <ng-template #loading>Loading...</ng-template>

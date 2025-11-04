@@ -45,19 +45,22 @@
         <h4>Upload Documents</h4>
         <div class="fieldset">
           <div class="fieldset-title">Aadhaar Document *</div>
-          <input type="file" />
+          <input type="file" name="aadhaarFile" #aadhaarFile="ngModel" [(ngModel)]="model.aadhaarFile" accept="image/*" required />
+          <div *ngIf="aadhaarFile.invalid && aadhaarFile.touched" class="error-text">Aadhaar document is required</div>
         </div>
         <div class="fieldset">
           <div class="fieldset-title">PAN Document *</div>
-          <input type="file" />
+          <input type="file" name="panFile" #panFile="ngModel" [(ngModel)]="model.panFile" accept="image/*" required />
+          <div *ngIf="panFile.invalid && panFile.touched" class="error-text">PAN document is required</div>
         </div>
         <div class="fieldset">
           <div class="fieldset-title">Photograph *</div>
-          <input type="file" />
+          <input type="file" name="photoFile" #photoFile="ngModel" [(ngModel)]="model.photoFile" accept="image/*" required />
+          <div *ngIf="photoFile.invalid && photoFile.touched" class="error-text">Photograph is required</div>
         </div>
 
         <div class="submit">
-          <button class="btn-primary" type="submit" [disabled]="loading || !f.form.valid">Submit KYC Application</button>
+          <button class="btn-primary" type="submit">Submit KYC Application</button>
         </div>
         <div *ngIf="error" class="muted">{{ error }}</div>
         <div class="muted">Already have an account? <a routerLink="/login">Login here</a></div>

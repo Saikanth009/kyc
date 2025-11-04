@@ -21,7 +21,12 @@ export class LoginComponent {
 
   submit() {
     this.loading = true;
-    this.api.login(this.model).subscribe({
+    this.error = '';
+    const payload = {
+      email: (this.model.email || '').toLowerCase().trim(),
+      password: this.model.password
+    };
+    this.api.login(payload).subscribe({
       next: ({ token }) => {
         localStorage.setItem('token', token);
         this.loading = false;
