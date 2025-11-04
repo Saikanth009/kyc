@@ -6,7 +6,7 @@ const Admin = require('../models/Admin');
 dotenv.config();
 
 async function seed() {
-  const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/kyc_portal';
+  const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://sruthi:Bilakanti06@cluster0.iifdflz.mongodb.net/kyc_portal?retryWrites=true&w=majority&appName=Cluster0';
   await mongoose.connect(MONGO_URI);
   const email = process.env.ADMIN_EMAIL || 'admin@kycportal.com';
   const password = process.env.ADMIN_PASSWORD || 'admin123';
