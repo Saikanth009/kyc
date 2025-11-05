@@ -46,14 +46,22 @@ if (fs.existsSync(frontDistPath)) {
 
 // DB connect and start
 const PORT = process.env.PORT || 4000;
-const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://sruthi:bilak1234@cluster0.jcbn59m.mongodb.net/kyc?retryWrites=true&w=majority";
+const MONGO_URI = process.env.MONGO_URI;
+
+if (!MONGO_URI) {
+  console.error('ERROR: MONGO_URI is not defined in environment variables');
+  console.error('Please create a .env file with MONGO_URI');
+  process.exit(1);
+}
+
 async function start() {
   try {
     await mongoose.connect(MONGO_URI);
-    console.log('MongoDB connected');
-    app.listen(PORT, () => console.log(`Server listening on :${PORT}`));
+    console.log('✅ MongoDB connected successfully');
+    app.listen(PORT, () => console.log(`🚀 Server listening on port ${PORT}`));
   } catch (err) {
-    console.error('Failed to start server', err);
+    console.error('❌ Failed to connect to MongoDB:', err.message);
+    console.error('Please check your MONGO_URI in the .env file');
     process.exit(1);
   }
 }
